@@ -30,7 +30,7 @@ export default function LoginPage() {
         router.push('/login');
       }
     };
-    
+
     checkAuth();
   }, [router]);
 
@@ -113,7 +113,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full"
+              className='flex justify-center items-center h-10 w-full'
             >
               {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </Button>
@@ -124,9 +124,9 @@ export default function LoginPage() {
               ¿No tienes una cuenta?
             </p>
             <Button
+              className='flex justify-center items-center h-10 w-full'
               variant="secondary"
               onClick={() => setShowRegisterForm(true)}
-              className="w-full"
             >
               <UserPlus className="w-4 h-4 mr-2" />
               Crear Nuevo Usuario

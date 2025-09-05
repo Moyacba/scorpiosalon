@@ -155,11 +155,35 @@ export default function AllAppointmentsPage() {
     }
   };
 
+  const parseAppointmentDate = (dateString: string): Date => {
+    // Handle different date formats safely without timezone issues
+    if (dateString.includes('/')) {
+      // Parse DD/MM/YYYY format for this app (Spanish format)
+      const parts = dateString.split('/');
+      if (parts.length === 3) {
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed in JavaScript Date
+        const year = parseInt(parts[2], 10);
+        return new Date(year, month, day);
+      }
+    }
+    
+    // If it's already in YYYY-MM-DD format (ISO), parse it safely
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+      return new Date(year, month - 1, day); // Month is 0-indexed
+    }
+    
+    // Fallback to default parsing (this might cause timezone issues)
+    return new Date(dateString);
+  };
+
   const groupAppointmentsByDate = (appointments: IAppointment[]) => {
     const groups: { [key: string]: IAppointment[] } = {};
     
     appointments.forEach(appointment => {
-      const dateKey = format(new Date(appointment.date), 'yyyy-MM-dd');
+      const appointmentDate = parseAppointmentDate(appointment.date.toString());
+      const dateKey = format(appointmentDate, 'yyyy-MM-dd');
       if (!groups[dateKey]) {
         groups[dateKey] = [];
       }
@@ -353,7 +377,7 @@ export default function AllAppointmentsPage() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-1 h-px bg-gray-200"></div>
                   <h2 className="text-lg font-semibold text-gray-900 bg-gray-50 px-4 py-2 rounded-full">
-                    {format(new Date(date), 'EEEE, d MMMM yyyy', { locale: es })}
+                    {format(new Date(date + 'T24:00:00'), 'EEEE, d MMMM yyyy', { locale: es })}
                   </h2>
                   <div className="flex-1 h-px bg-gray-200"></div>
                 </div>
