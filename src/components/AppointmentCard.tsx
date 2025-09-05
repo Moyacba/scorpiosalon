@@ -103,7 +103,7 @@ export default function AppointmentCard({
             <span className="text-sm text-gray-600">{appointment.estimatedDuration} min</span>
           </div>
           <div className="flex items-center space-x-2">
-            <DollarSign className="w-4 h-4 text-gray-500" />
+            {/* <DollarSign className="w-4 h-4 text-gray-500" /> */}
             <span className="text-sm font-medium">${appointment.totalCost}</span>
           </div>
         </div>

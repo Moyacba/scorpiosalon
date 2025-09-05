@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
     // Validate authentication
     const payload = validateToken(token);
-    if (!payload || payload.role !== 'admin') {
+    if (!payload || (payload.role !== 'admin' && payload.role !== 'hairdresser')) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

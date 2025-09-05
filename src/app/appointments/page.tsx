@@ -167,20 +167,20 @@ export default function AllAppointmentsPage() {
         return new Date(year, month, day);
       }
     }
-    
+
     // If it's already in YYYY-MM-DD format (ISO), parse it safely
     if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
       const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
       return new Date(year, month - 1, day); // Month is 0-indexed
     }
-    
+
     // Fallback to default parsing (this might cause timezone issues)
     return new Date(dateString);
   };
 
   const groupAppointmentsByDate = (appointments: IAppointment[]) => {
     const groups: { [key: string]: IAppointment[] } = {};
-    
+
     appointments.forEach(appointment => {
       const appointmentDate = parseAppointmentDate(appointment.date.toString());
       const dateKey = format(appointmentDate, 'yyyy-MM-dd');
@@ -258,7 +258,7 @@ export default function AllAppointmentsPage() {
                   <X className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Fecha Desde */}
                 <div>
@@ -310,10 +310,10 @@ export default function AllAppointmentsPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => setFilters({ 
-                    fromDate: format(new Date(), 'yyyy-MM-dd'), 
-                    toDate: '', 
-                    status: 'all' 
+                  onClick={() => setFilters({
+                    fromDate: format(new Date(), 'yyyy-MM-dd'),
+                    toDate: '',
+                    status: 'all'
                   })}
                 >
                   Desde hoy
@@ -321,10 +321,10 @@ export default function AllAppointmentsPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => setFilters({ 
-                    fromDate: format(new Date(), 'yyyy-MM-dd'), 
-                    toDate: '', 
-                    status: 'pending' 
+                  onClick={() => setFilters({
+                    fromDate: format(new Date(), 'yyyy-MM-dd'),
+                    toDate: '',
+                    status: 'pending'
                   })}
                 >
                   Pendientes
@@ -332,10 +332,10 @@ export default function AllAppointmentsPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => setFilters({ 
-                    fromDate: format(new Date(), 'yyyy-MM-dd'), 
-                    toDate: '', 
-                    status: 'confirmed' 
+                  onClick={() => setFilters({
+                    fromDate: format(new Date(), 'yyyy-MM-dd'),
+                    toDate: '',
+                    status: 'confirmed'
                   })}
                 >
                   Confirmados
@@ -343,10 +343,10 @@ export default function AllAppointmentsPage() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => setFilters({ 
-                    fromDate: '', 
-                    toDate: '', 
-                    status: 'all' 
+                  onClick={() => setFilters({
+                    fromDate: '',
+                    toDate: '',
+                    status: 'all'
                   })}
                 >
                   Todos históricos
@@ -385,8 +385,8 @@ export default function AllAppointmentsPage() {
                 {/* Appointments for this date */}
                 <div className="grid gap-3">
                   {groupedAppointments[date].map(appointment => (
-                    <Card 
-                      key={appointment._id} 
+                    <Card
+                      key={appointment._id}
                       className={`cursor-pointer hover:shadow-md transition-shadow ${(user.role === 'admin' || user.canModifyAppointments) ? 'hover:bg-gray-50' : ''}`}
                       onClick={() => (user.role === 'admin' || user.canModifyAppointments) && handleEditAppointment(appointment)}
                     >
@@ -430,7 +430,7 @@ export default function AllAppointmentsPage() {
                               <span className="text-sm text-gray-600">{appointment.estimatedDuration} min</span>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <DollarSign className="w-4 h-4 text-gray-500" />
+                              {/* <DollarSign className="w-4 h-4 text-gray-500" /> */}
                               <span className="text-sm font-medium">${appointment.totalCost}</span>
                             </div>
                           </div>

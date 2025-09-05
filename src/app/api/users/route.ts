@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     }
 
     const payload = validateToken(token);
-    if (!payload || payload.role !== 'admin') {
+    if (!payload) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
