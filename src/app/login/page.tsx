@@ -7,6 +7,8 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Card from '@/components/ui/Card';
 import RegisterForm from '@/components/RegisterForm';
+import Image from 'next/image';
+import scorpioLogo from '@/assets/scorpioLogo.jpg';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -75,10 +77,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md">
+        <div className="text-center mb-8 flex justify-center">
+          <Image src={scorpioLogo} alt="scorpioLogo" width={180} />
+        </div>
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          {/* <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Turnero Peluquería
-          </h1>
+          </h1> */}
           <p className="text-gray-600">
             Inicia sesión para acceder al sistema
           </p>
