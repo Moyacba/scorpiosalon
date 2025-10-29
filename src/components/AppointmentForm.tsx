@@ -131,13 +131,21 @@ export default function AppointmentForm({
 
   const services = [
     'Corte',
-    'Lavado y Peinado',
-    'Coloración',
-    'Mechas',
-    'Tratamiento',
-    'Peinado para Evento',
-    'Corte + Lavado',
-    'Coloración + Corte',
+    'Lavado + Corte',
+    'Lavado + Corte + Modelado',
+    'Lavado + Brushing',
+    'Lavado + Nutrición en crema',
+    'Planchado',
+    'Antifrizz( Keratina - Plástificado - Botox)',
+    'Alisado multivitaminico',
+    'Alisado cristal',
+    'Color en crecimiento',
+    'Color completo',
+    'Reflejos',
+    'Mechas localizadas',
+    'Balayage',
+    'Corrección de color',
+    'Peinado y maquillaje',
     'Otro',
   ];
 
