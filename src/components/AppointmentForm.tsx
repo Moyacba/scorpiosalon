@@ -24,7 +24,7 @@ interface FormData {
   hairdresserId: string;
   date: string;
   time: string;
-  service: string;
+  service: string | string[]; // Now supports multiple services
   estimatedDuration: number;
   totalCost: number;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -40,6 +40,11 @@ export default function AppointmentForm({
   hairdressers,
 }: AppointmentFormProps) {
   const [showDeposit, setShowDeposit] = useState(appointment?.status === 'confirmed' && !!appointment?.deposit);
+  const [selectedServices, setSelectedServices] = useState<string[]>(
+    appointment?.service 
+      ? (Array.isArray(appointment.service) ? appointment.service : [appointment.service])
+      : []
+  );
   
   const {
     register,
@@ -72,7 +77,7 @@ export default function AppointmentForm({
       hairdresserId: '',
       date: prefilledData?.date || '',
       time: prefilledData?.time || '',
-      service: '',
+      service: [],
       estimatedDuration: 60,
       totalCost: 0,
       status: 'pending',
@@ -94,15 +99,20 @@ export default function AppointmentForm({
   }, [watchedStatus, setValue]);
 
   const onSubmit = (data: FormData) => {
+    // Use selected services instead of form data service
+    const serviceData = selectedServices.length > 0 ? selectedServices : data.service;
+    
     // Debug log to see what data we're sending
     console.log('Form data being submitted:', data);
+    console.log('Selected services:', selectedServices);
     console.log('Form errors:', errors);
     console.log('Current form values:', getValues());
     
     // Validate required fields manually
+    const hasValidService = Array.isArray(serviceData) ? serviceData.length > 0 : !!serviceData;
     if (!data.clientName || !data.clientLastName || !data.clientPhone || 
         !data.hairdresserId || !data.date || !data.time || 
-        !data.service || !data.estimatedDuration || data.totalCost === undefined) {
+        !hasValidService || !data.estimatedDuration || data.totalCost === undefined) {
       console.error('Missing required fields:', {
         clientName: !data.clientName,
         clientLastName: !data.clientLastName,
@@ -110,7 +120,7 @@ export default function AppointmentForm({
         hairdresserId: !data.hairdresserId,
         date: !data.date,
         time: !data.time,
-        service: !data.service,
+        service: !hasValidService,
         estimatedDuration: !data.estimatedDuration,
         totalCost: data.totalCost === undefined
       });
@@ -120,6 +130,7 @@ export default function AppointmentForm({
     // Ensure numeric values are properly converted
     const processedData = {
       ...data,
+      service: serviceData, // Use the validated service data
       estimatedDuration: Number(data.estimatedDuration),
       totalCost: Number(data.totalCost),
       deposit: data.deposit ? Number(data.deposit) : undefined,
@@ -235,22 +246,38 @@ export default function AppointmentForm({
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Servicio <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Servicios <span className="text-red-500">*</span>
               </label>
-              <select
-                {...register('service', { required: 'El servicio es requerido' })}
-                className="input-field"
-              >
-                <option value="">Seleccionar servicio</option>
+              <div className="space-y-2 max-h-60 overflow-y-auto border border-gray-300 rounded-md p-3">
                 {services.map((service) => (
-                  <option key={service} value={service}>
-                    {service}
-                  </option>
+                  <label
+                    key={service}
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedServices.includes(service)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedServices([...selectedServices, service]);
+                        } else {
+                          setSelectedServices(selectedServices.filter(s => s !== service));
+                        }
+                      }}
+                      className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                    />
+                    <span className="text-sm text-gray-700">{service}</span>
+                  </label>
                 ))}
-              </select>
-              {errors.service && (
-                <p className="mt-1 text-sm text-red-600">{errors.service.message}</p>
+              </div>
+              {selectedServices.length === 0 && (
+                <p className="mt-1 text-sm text-red-600">Selecciona al menos un servicio</p>
+              )}
+              {selectedServices.length > 0 && (
+                <p className="mt-2 text-sm text-gray-600">
+                  Seleccionados: {selectedServices.join(', ')}
+                </p>
               )}
             </div>
 

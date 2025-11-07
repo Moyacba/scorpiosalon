@@ -14,7 +14,7 @@ export interface IAppointment extends Document {
   // Appointment details
   date: Date;
   time: string;
-  service: string;
+  service: string | string[]; // Can be single service or multiple services
   estimatedDuration: number; // in minutes
   totalCost: number;
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -66,9 +66,16 @@ const AppointmentSchema = new Schema<IAppointment>({
     required: [true, 'Time is required'],
   },
   service: {
-    type: String,
+    type: Schema.Types.Mixed, // Can be String or Array of Strings
     required: [true, 'Service is required'],
-    trim: true,
+    validate: {
+      validator: function(v: any) {
+        if (typeof v === 'string') return v.trim().length > 0;
+        if (Array.isArray(v)) return v.length > 0 && v.every((s: any) => typeof s === 'string' && s.trim().length > 0);
+        return false;
+      },
+      message: 'Service must be a non-empty string or array of strings'
+    }
   },
   estimatedDuration: {
     type: Number,

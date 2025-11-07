@@ -417,7 +417,9 @@ export default function AllAppointmentsPage() {
 
                         <div className="space-y-2">
                           <div className="text-sm text-gray-700">
-                            <strong>Servicio:</strong> {appointment.service}
+                            <strong>Servicio:</strong> {Array.isArray(appointment.service) 
+                              ? appointment.service.join(', ') 
+                              : appointment.service}
                           </div>
 
                           <div className="text-sm text-gray-700">
